@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.ourdailycodes</groupId>
+  <artifactId>simplereadfiles</artifactId>
+  <version>1.0.0</version>
+
+  <packaging>jar</packaging>
+
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <distribution>repo</distribution>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+    </license>
+  </licenses>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.target>1.6</maven.compiler.target>
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <version.exec.plugin>1.2.1</version.exec.plugin>
+  </properties>
+
+  <build>
+    <finalName>${project.artifactId}</finalName>
+
+    <defaultGoal>
+      clean install exec:exec
+    </defaultGoal>
+
+    <plugins>
+      <plugin>
+        <!--after building with "mvn clean install", use "mvn exec:exec" -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>${version.exec.plugin}</version>
+        <configuration>
+          <executable>java</executable>
+          <arguments>
+            <argument>-classpath</argument>
+            <classpath/>
+            <argument>-Dthreadpoolmax=2</argument>
+            <argument>com.ourdailycodes.simplereadfiles.main.SRFMain</argument>
+            <!-- head -c 10M </arguments>dev/urandom > ../TESTX  -->
+            <argument>../TEST1</argument>
+            <argument>../TEST2</argument>
+            <argument>../TEST3</argument>
+            <argument>../TEST4</argument>
+          </arguments>
+        </configuration>
+      </plugin>
+    </plugins>
+
+  </build>
+
+</project>
