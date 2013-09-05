@@ -42,6 +42,7 @@
             <argument>-classpath</argument>
             <classpath/>
             <argument>-Dthreadpoolmax=2</argument>
+            <argument>-Dqueuesize=1000000</argument>
             <argument>com.ourdailycodes.simplereadfiles.main.SRFMain</argument>
             <!-- head -c 10M </arguments>dev/urandom > ../TESTX  -->
             <argument>../TEST1</argument>
