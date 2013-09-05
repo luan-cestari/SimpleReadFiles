@@ -18,6 +18,7 @@ public class SRFMain {
 
 		ThreadPoolExecutor e = new ThreadPoolExecutor(tpm, tpm, 3, TimeUnit.MINUTES, new ArrayBlockingQueue<Runnable>(queueSize, true), new ThreadPoolExecutor.CallerRunsPolicy());
 
+		long startTime = System.currentTimeMillis();
 		for(final String s : args){
 			e.submit(new Runnable() {
 				@Override
@@ -38,7 +39,7 @@ public class SRFMain {
 						}
 						long stopTime = System.currentTimeMillis();
 						long elapsedTime = stopTime - startTime;
-						System.out.println(s+" : "+elapsedTime);
+						System.out.println(s+" : "+elapsedTime+" milliseconds");
 					} catch (Exception ex) {
 					} finally {
 					}
@@ -47,6 +48,9 @@ public class SRFMain {
 		}
 		e.shutdown();
 		e.awaitTermination(1, TimeUnit.MINUTES);
+		long stopTime = System.currentTimeMillis();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Program took: "+elapsedTime+" milliseconds");
 		System.out.println("!!!END!!!");
 	}
 }
