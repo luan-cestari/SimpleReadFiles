@@ -4,6 +4,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.io.FileInputStream;
+import java.io.DataInputStream;
 import java.nio.channels.FileChannel;
 import java.nio.ByteBuffer;
 
@@ -26,17 +27,14 @@ public class SRFMain {
 					try {
 						long startTime = System.currentTimeMillis();
 						FileInputStream f = new FileInputStream( s );
-						FileChannel ch = f.getChannel( );
-						byte[] barray = new byte[262144];
-						ByteBuffer bb = ByteBuffer.wrap( barray );
+                        DataInputStream d = new DataInputStream(f);
+						byte[] barray = new byte[((int)f.getChannel().size())];
+                        d.read(barray);
 						long checkSum = 0L;
-						int nRead;
-						while ( (nRead=ch.read( bb )) != -1 )
-						{
-							for ( int i=0; i<nRead; i++ )
-								checkSum += barray[i];
-							bb.clear( );
-						}
+						int nRead = barray.length;
+						for ( int i=0; i<nRead; i++ )
+						    checkSum += barray[i];
+
 						long stopTime = System.currentTimeMillis();
 						long elapsedTime = stopTime - startTime;
 						System.out.println(s+" : "+elapsedTime+" milliseconds");
