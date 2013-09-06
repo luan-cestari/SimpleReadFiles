@@ -45,7 +45,7 @@
             <!--<argument>-Dthreadpoolmax=1</argument>-->
             <!--<argument>-Dthreadpoolmax=4</argument>-->
             <argument>-Dqueuesize=1000000</argument>
-            <argument>-Dbbsize=262144</argument>
+            <argument>-Dbbsize=1048576</argument>
             <!--<argument>-Dbbsize=131072</argument>-->
             <!--<argument>-Dbbsize=65536</argument>-->
             <!--<argument>-Dbbsize=1024</argument>-->
