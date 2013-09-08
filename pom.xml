@@ -42,27 +42,10 @@
             <argument>-classpath</argument>
             <classpath/>
             <argument>-Dthreadpoolmax=2</argument>
-            <!--<argument>-Dthreadpoolmax=1</argument>-->
-            <!--<argument>-Dthreadpoolmax=4</argument>-->
             <argument>-Dqueuesize=10000</argument>
             <argument>-Dbbsize=262144</argument>
-            <!--<argument>-Dbbsize=1048576</argument>-->
-            <!--<argument>-Dbbsize=131072</argument>-->
-            <!--<argument>-Dbbsize=65536</argument>-->
-            <!--<argument>-Dbbsize=1024</argument>-->
             <argument>com.ourdailycodes.simplereadfiles.main.SRFMain</argument>
-            <!-- head -c 10M </arguments>dev/urandom > ../TESTX  -->
-            <argument>../TEST0</argument>
-            <argument>../TEST1</argument>
-            <argument>../TEST2</argument>
-            <argument>../TEST3</argument>
-            <argument>../TEST4</argument>
-            <argument>../TEST5</argument>
-            <argument>../TEST6</argument>
-            <argument>../TEST7</argument>
-            <argument>../TEST8</argument>
-            <argument>../TEST9</argument>
-            <argument>../TEST10</argument>
+            <argument>sample</argument>
           </arguments>
         </configuration>
       </plugin>
