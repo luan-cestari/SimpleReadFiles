@@ -65,9 +65,9 @@ public class SRFMain {
 				Matcher matcher = pattern.matcher(input);
 				while (matcher.find()) {
 					//This will always generate two groups for each match. It means even if the file have only one entry, it will produce these two groups representing the two different pattern that it have to extract the data (so always one of them is null)
-		            System.out.println(matcher.group("first")); //matcher.group(1)
-		            System.out.println(matcher.group("second")); //if matcher.group(1) is null, matcher.group(2)
-		            System.out.println("!!!!!!!!!!!!");
+		            //System.out.println(matcher.group("first")); //matcher.group(1) -> from <DataLen>
+		            //System.out.println(matcher.group("second")); //if matcher.group(1) is null, matcher.group(2) -> from Content-Location: data.bin
+		            //System.out.println("!!!!!!!!!!!!");
 				}
 				// if in debug mode, print the time to process this file
 				if(DEBUG){
