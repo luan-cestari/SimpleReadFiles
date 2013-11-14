@@ -10,8 +10,6 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SRFMain {
 	private static final class NamedThreadFactory implements ThreadFactory {
@@ -30,13 +28,11 @@ public class SRFMain {
 		private final String encoding;
 		private final int bbSize;
 		private final String filePath;
-		private final Pattern pattern;
 		
-		private IOThread(String encoding, int bbSize, String filePath, Pattern pattern) {
+		private IOThread(String encoding, int bbSize, String filePath) {
 			this.encoding = encoding;
 			this.bbSize = bbSize;
 			this.filePath = filePath;
-			this.pattern = pattern;
 		}
 
 		@Override
@@ -51,23 +47,14 @@ public class SRFMain {
 				FileChannel ch = f.getChannel( );
 				byte[] barray = new byte[bbSize];
 				ByteBuffer bb = ByteBuffer.wrap( barray );
-		        Charset charset = Charset.forName(encoding);
-		        StringBuilder sb = new StringBuilder();
-				while ( ch.read( bb ) != -1 )
+				Charset charset = Charset.forName(encoding);
+				StringBuilder sb = new StringBuilder();
+				long checkSum = 0L;
+				int nRead;
+				while ( (nRead=ch.read( bb )) != -1 )
 				{
-					String s2 = new String( barray, charset );
-		            sb.append(s2);
+					for ( int i=0; i<nRead; i++ )checkSum += barray[i];
 					bb.clear( );
-				}
-				String input = sb.toString();
-				
-				//Extract the data
-				Matcher matcher = pattern.matcher(input);
-				while (matcher.find()) {
-					//This will always generate two groups for each match. It means even if the file have only one entry, it will produce these two groups representing the two different pattern that it have to extract the data (so always one of them is null)
-		            //System.out.println(matcher.group("first")); //matcher.group(1) -> from <DataLen>
-		            //System.out.println(matcher.group("second")); //if matcher.group(1) is null, matcher.group(2) -> from Content-Location: data.bin
-		            //System.out.println("!!!!!!!!!!!!");
 				}
 				// if in debug mode, print the time to process this file
 				if(DEBUG){
@@ -90,6 +77,7 @@ public class SRFMain {
 	}
 
 	public static void main(String[] paths) throws Exception {
+		Thread.sleep(10000);
 		
 		String encoding = System.getProperty("file.encoding");
 		String threadpoolmaxStr = System.getProperty("threadpoolmax");
@@ -99,12 +87,10 @@ public class SRFMain {
 		int tpm = threadpoolmaxStr == null ? 1 : Integer.parseInt(threadpoolmaxStr);
 		int queueSize = queuesizeStr == null ? 1 : Integer.parseInt(queuesizeStr);
 		int bbSize = bbsizeStr == null ? 1 : Integer.parseInt(bbsizeStr);
-		// this pattern follows the sample in http://pastebin.com/8zB2MECj
-		Pattern pattern = Pattern.compile("--MIME_boundary-\\d*\\n(?:Content-Type: text/xml; charset=\"UTF-8\"\\nContent-Transfer-Encoding: 8bit\\nContent-Location: dataHeader\\.xml\\n<\\?xml version=\"1\\.0\" encoding=\"UTF-8\"\\?>\\n<Header>\\n <DataLen>(?<first>.*)</DataLen>|Content-Type: application/octet-stream\\nContent-Location: data\\.bin\\n(?<second>.*)\\n)");
 		ThreadPoolExecutor e = new ThreadPoolExecutor(tpm, tpm, 3, TimeUnit.MINUTES, new ArrayBlockingQueue<Runnable>(queueSize, true), new NamedThreadFactory(), new ThreadPoolExecutor.CallerRunsPolicy() );
 
 		for(final String filePath : paths){
-			e.submit(new IOThread(encoding, bbSize, filePath, pattern));
+			e.submit(new IOThread(encoding, bbSize, filePath));
 		}
 		
 		// Make the pool not accept new requests for process and force the termination in 5 minutes 

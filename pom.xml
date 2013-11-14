@@ -45,7 +45,7 @@
             <argument>-Dqueuesize=10000</argument>
             <argument>-Dbbsize=262144</argument>
             <argument>com.ourdailycodes.simplereadfiles.main.SRFMain</argument>
-            <argument>sample</argument>
+            <argument>../BIGFILE</argument>
           </arguments>
         </configuration>
       </plugin>
